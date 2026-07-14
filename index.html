@@ -116,6 +116,7 @@
     font-weight: 400;
     letter-spacing: 0.02em;
     transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
   }
 
   .links a:hover,
@@ -218,7 +219,7 @@
 
     <ul class="links">
       <li>
-        <a href="#" target="_blank" rel="noopener">
+        <a href="https://www.instagram.com/weeniemon" target="_blank" rel="noopener">
           <span class="label">
             <span class="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -227,22 +228,7 @@
                 <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
               </svg>
             </span>
-            Instagram
-          </span>
-          <span class="arrow">&rarr;</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://www.instagram.com/weeniemon" target="_blank" rel="noopener">
-          <span class="label">
-            <span class="icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 4h14v3H5z"></path>
-                <path d="M5 9h14v3H5z"></path>
-                <path d="M5 14h14v7l-7-4-7 4z"></path>
-              </svg>
-            </span>
-            Substack
+            <span class="link-text">Instagram</span>
           </span>
           <span class="arrow">&rarr;</span>
         </a>
@@ -252,18 +238,33 @@
           <span class="label">
             <span class="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"></circle>
-                <ellipse cx="12" cy="12" rx="4" ry="9"></ellipse>
-                <path d="M3 12h18"></path>
+                <path d="M5 4h14v3H5z"></path>
+                <path d="M5 9h14v3H5z"></path>
+                <path d="M5 14h14v7l-7-4-7 4z"></path>
               </svg>
             </span>
-            LP Guides
+            <span class="link-text">Substack</span>
           </span>
           <span class="arrow">&rarr;</span>
         </a>
       </li>
       <li>
-        <a href="mailto:yijun.tan@asagi.waseda.jp">
+        <a href="#" target="_blank" rel="noopener">
+          <span class="label">
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <ellipse cx="12" cy="12" rx="4" ry="9"></ellipse>
+                <path d="M3 12h18"></path>
+              </svg>
+            </span>
+            <span class="link-text">Portfolio</span>
+          </span>
+          <span class="arrow">&rarr;</span>
+        </a>
+      </li>
+      <li>
+        <a href="mailto:yijun.tan@asagi.waseda.jp" id="email-link" data-email="yijun.tan@asagi.waseda.jp">
           <span class="label">
             <span class="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -271,7 +272,7 @@
                 <path d="M3 6.5l9 6.5 9-6.5"></path>
               </svg>
             </span>
-            Email
+            <span class="link-text">Email</span>
           </span>
           <span class="arrow">&rarr;</span>
         </a>
@@ -279,6 +280,51 @@
     </ul>
 
   </main>
+
+  <script>
+    (function () {
+      var emailLink = document.getElementById('email-link');
+      if (!emailLink) return;
+      var textEl = emailLink.querySelector('.link-text');
+      var originalText = textEl.textContent;
+      var resetTimer = null;
+
+      emailLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var email = emailLink.getAttribute('data-email');
+
+        function showCopied() {
+          textEl.textContent = 'Copied!';
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(function () {
+            textEl.textContent = originalText;
+          }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(showCopied).catch(function () {
+            fallbackCopy(email);
+            showCopied();
+          });
+        } else {
+          fallbackCopy(email);
+          showCopied();
+        }
+      });
+
+      function fallbackCopy(text) {
+        var temp = document.createElement('textarea');
+        temp.value = text;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.focus();
+        temp.select();
+        try { document.execCommand('copy'); } catch (err) {}
+        document.body.removeChild(temp);
+      }
+    })();
+  </script>
 
 </body>
 </html>
